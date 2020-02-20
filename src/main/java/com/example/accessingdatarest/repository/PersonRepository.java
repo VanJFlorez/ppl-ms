@@ -1,13 +1,14 @@
-package com.example.accessingdatarest;
+package com.example.accessingdatarest.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-// @RepositoryRestResource(collectionResourceRel = "people", path = "people")
+import com.example.accessingdatarest.entity.Person;
+
 public interface PersonRepository extends JpaRepository<Person, Long> {
-  // List<Person> findByLastName(@Param("name") String name);
+
 	public List<Person> findByFirstName(String firstName);
 	public List<Person> findByLastName(String lastName);
 	

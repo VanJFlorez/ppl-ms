@@ -1,4 +1,4 @@
-package com.example.accessingdatarest;
+package com.example.accessingdatarest.controller;
 
 import java.util.List;
 
@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.accessingdatarest.entity.Person;
+import com.example.accessingdatarest.repository.PersonRepository;
+import com.example.accessingdatarest.service.FamilyIntegrityException;
+import com.example.accessingdatarest.service.FamilyService;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
 @RestController // Since we are using JpaRepository all methods return JSON by default...
@@ -23,15 +27,24 @@ public class PeopleController {
 	@Autowired
 	PersonRepository personRepo;
 	
+	@Autowired
+	FamilyService fService;
+	
 	/**
 	 * Adds a Person entry to database.
 	 * @param A person Object
 	 * @return The persisted person object
 	 * @author Camilo F.
+	 * @throws FamilyIntegrityException 
 	 */
 	@PostMapping("")
-	public Person addPerson(@RequestBody Person p) {
-		System.out.println(p);
+	public Person addPerson(@RequestBody Person p) throws FamilyIntegrityException {
+		if(!fService.validateParents(p.getIdMother()))
+			throw new FamilyIntegrityException("Mother's id does not exists. This item will not be saved.");	
+		if(!fService.validateParents(p.getIdFather()))
+			throw new FamilyIntegrityException("Mother's id does not exists. This item will not be saved.");
+		if(!fService.validateSilbings(p.getIdSilbings()))
+			throw new FamilyIntegrityException("Some silbings's ids do not exist. This item will not be saved.");
 		personRepo.save(p);
 		return p;
 	}
