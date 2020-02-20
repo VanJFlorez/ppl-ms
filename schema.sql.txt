@@ -1,0 +1,11 @@
+---------------------------------------------
+-- FIRST CREATE THE DATABASE
+---------------------------------------------
+
+CRATE DATABASE people
+
+---------------------------------------------
+-- THEN THE JPA WILL HANDLE TABLE CREATION
+---------------------------------------------
+
+-- spring.jpa.hibernate.ddl-auto=update
