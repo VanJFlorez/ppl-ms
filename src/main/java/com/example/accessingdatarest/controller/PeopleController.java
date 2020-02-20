@@ -66,20 +66,25 @@ public class PeopleController {
 	 * @param newPerson - object that holds the new data
 	 * @return - the replaced item, for undo purposes
 	 * @author Camilo F.
+	 * @throws PersonNotFoundException 
 	 */
 	@PutMapping("/{id}")
-	public Person updatePerson(@PathVariable long id, @RequestBody Person newPerson) throws InvalidDefinitionException {
+	public Person updatePerson(@PathVariable long id, @RequestBody Person newPerson) throws PersonNotFoundException  {
 		Person oldPerson;
 		try {
 			oldPerson = personRepo.getOne(id);
 			oldPerson.setFirstName(newPerson.getFirstName());
 			oldPerson.setLastName(newPerson.getLastName());
+			oldPerson.setIdMother(newPerson.getIdMother());
+			oldPerson.setIdFather(newPerson.getIdFather());
+			oldPerson.setIdSilbings(newPerson.getIdSilbings());
+			
+			personRepo.save(oldPerson);
 			return oldPerson;
 		} catch(EmptyResultDataAccessException e) {
-			return new Person();
+			throw new PersonNotFoundException("This person's id: " + id + " does not exists");
 		} catch(Exception e) {
-			System.out.println("[ERROR] InvocationException");
-			return new Person();
+			throw new PersonNotFoundException("This person's id: " + id + " does not exists");
 		}
 	}
 	

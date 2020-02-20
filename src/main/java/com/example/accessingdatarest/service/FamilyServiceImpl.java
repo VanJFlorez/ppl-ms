@@ -23,12 +23,12 @@ public class FamilyServiceImpl implements FamilyService {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean validateParents(long idParent) {
-		if(personRepo.findById(idParent).isPresent())
+		if(idParent == -1 || personRepo.findById(idParent).isPresent())
 			return true;
 		else {
 			System.out.println("[ERROR] Parent id: " + idParent + " not found.");
